@@ -22,7 +22,15 @@ object Main {
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = ???
+  def balance(chars: List[Char]): Boolean = {
+    def balanceHelper(chars: List[Char], isOpened: Boolean, isClosed:Boolean): Boolean = chars match {
+      case Nil => isOpened && isClosed
+      case '('::tail => balanceHelper(tail, true, false)
+      case ')'::tail => balanceHelper(tail, isOpened, true)
+
+    }
+    balanceHelper(chars,false, false)
+  }
 
   /**
    * Exercise 3
