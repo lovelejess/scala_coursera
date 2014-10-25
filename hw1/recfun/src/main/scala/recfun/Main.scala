@@ -23,13 +23,13 @@ object Main {
    * Exercise 2
    */
   def balance(chars: List[Char]): Boolean = {
-    def balanceHelper(chars: List[Char], isOpened: Boolean, isClosed:Boolean): Boolean = chars match {
+    def isRemainingListBalanced(chars: List[Char], isOpened: Boolean, isClosed:Boolean): Boolean = chars match {
       case Nil => isOpened && isClosed
-      case '('::tail => balanceHelper(tail, true, false)
-      case ')'::tail => balanceHelper(tail, isOpened, true)
-
+      case '('::tail => isRemainingListBalanced(tail, true, false)
+      case ')'::tail => isRemainingListBalanced(tail, isOpened, true)
+      case x::tail => isRemainingListBalanced(tail, isOpened, isClosed)
     }
-    balanceHelper(chars,false, false)
+    isRemainingListBalanced(chars, false, false)
   }
 
   /**
