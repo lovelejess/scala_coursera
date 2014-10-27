@@ -35,5 +35,18 @@ object Main {
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = ???
+  def countChange(money: Int, coins: List[Int]): Int = {
+    def countCombinations(money:Int, coins: List[Int], startingIndex:Int):Int = money match {
+      case 0 => 1
+      case money => {
+        if ((money < 0) || (coins.length == startingIndex)) 0
+        else {
+          val withFirstCoin = countCombinations(money - coins(startingIndex), coins, startingIndex)
+          val withRestOfTheCoins = countCombinations(money, coins, startingIndex + 1)
+          withFirstCoin + withRestOfTheCoins
+        }
+      }
+    }
+    countCombinations(money,coins, 0)
+  }
 }
