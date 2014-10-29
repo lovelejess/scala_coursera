@@ -10,9 +10,10 @@
 *.iml
 *.log
 *.tok
-*/.idea/
+*.idea/
 *.enc
 .classpath
-.project
-.settings
-.cache
+*.project
+*.settings
+*.cache
+
