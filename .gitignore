@@ -15,9 +15,11 @@ project/boot/
 project/plugins/project/
 project/project/target/
 project/target/
+project/target/resolution/
 project/submission/
 submission/target/
 target/resolution/
+
 # Scala-IDE specific
 .scala_dependencies
 .worksheet
