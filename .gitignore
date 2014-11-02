@@ -13,6 +13,8 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+project/submission
+project/target
 
 # Scala-IDE specific
 .scala_dependencies
@@ -25,6 +27,8 @@ project/plugins/project/
 
 ## Directory-based project format:
 .idea/
+.idea/sbt.xml
+.idea/workspace.xml
 
 # IntelliJ
 out/
