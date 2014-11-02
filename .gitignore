@@ -33,7 +33,8 @@ target/resolution/
 .idea/
 .idea/sbt.xml
 .idea/workspace.xml
+/*.idea/sbt.xml
+/*.idea/workspace.xml
 
 # IntelliJ
 out/
-
