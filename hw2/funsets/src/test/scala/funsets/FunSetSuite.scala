@@ -86,18 +86,23 @@ class FunSetSuite extends FunSuite {
    * Once you finish your implementation of "singletonSet", exchange the
    * function "ignore" by "test".
    */
-  ignore("singletonSet(1) contains 1") {
+  test("singletonSet(x) contains y") {
     
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
      * to the values "s1" to "s3". 
      */
     new TestSets {
-      /**
-       * The string argument of "assert" is a message that is printed in case
-       * the test fails. This helps identifying which assertion failed.
-       */
-      assert(contains(s1, 1), "Singleton")
+      assert(contains(s1, 1), "Singleton (s1,1)")
+      assert(contains(s2, 2), "Singleton (s2,2)")
+      assert(contains(s3, 3), "Singleton (s3,3)")
+    }
+  }
+
+  test("singletonSet Sx does not contain y"){
+    new TestSets {
+      assert(!contains(s1,2), "Singleton (s1,2)")
+      assert(!contains(s2,1), "Singleton (s2,1)")
     }
   }
 
