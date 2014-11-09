@@ -2,6 +2,8 @@
 ### Scala ###
 *.class
 *.log
+*.classpath
+*.project
 
 # sbt specific
 .cache/
