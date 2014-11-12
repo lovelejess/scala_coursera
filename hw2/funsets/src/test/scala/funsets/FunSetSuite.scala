@@ -1,5 +1,6 @@
 package funsets
 
+import org.scalacheck.Prop.True
 import org.scalatest.FunSuite
 
 import org.junit.runner.RunWith
@@ -78,9 +79,12 @@ class FunSetSuite extends FunSuite {
 
   trait TestSets
   {
-    val s1 = singletonSet(1)
-    val s2 = singletonSet(2)
-    val s3 = singletonSet(3)
+    val singletonSet1 = singletonSet(1)
+    val singletonSet2 = singletonSet(2)
+    val singletonSet3 = singletonSet(3)
+    val negativeIntegerSet = (x:Int) => x < 0
+    val positiveIntegerSet = (x:Int) => x > 0
+
   }
 
   /**
@@ -99,9 +103,9 @@ class FunSetSuite extends FunSuite {
      */
     new TestSets
     {
-      assert(contains(s1, 1), "Singleton (s1,1)")
-      assert(contains(s2, 2), "Singleton (s2,2)")
-      assert(contains(s3, 3), "Singleton (s3,3)")
+      assert(contains(singletonSet1 , 1), "Singleton (s1,1)")
+      assert(contains(singletonSet2, 2), "Singleton (s2,2)")
+      assert(contains(singletonSet3, 3), "Singleton (s3,3)")
     }
   }
 
@@ -109,8 +113,8 @@ class FunSetSuite extends FunSuite {
   {
     new TestSets
     {
-      assert(!contains(s1,2), "Singleton (s1,2)")
-      assert(!contains(s2,1), "Singleton (s2,1)")
+      assert(!contains(singletonSet1,2), "Singleton (s1,2)")
+      assert(!contains(singletonSet2,1), "Singleton (s2,1)")
     }
   }
 
@@ -118,27 +122,31 @@ class FunSetSuite extends FunSuite {
   {
     new TestSets
     {
-      val unionSet = union(s1, s2)
-      assert(contains(unionSet, 1), "union(s1,s2): Union contains 1")
-      assert(contains(unionSet, 2), "union(s1,s2): Union contains 2")
-      assert(!contains(unionSet, 3), "union(s1,s2): Union should not contain 3")
+      val unionSetNegativesS2 = union(negativeIntegerSet, singletonSet2)
+      assert(contains(unionSetNegativesS2, -1), "union(negativeIntegerSet, singletonSet2): Union contains -1")
+      assert(contains(unionSetNegativesS2, 2), "union(negativeIntegerSet, singletonSet2): Union contains 2")
+      assert(!contains(unionSetNegativesS2, 3), "union(negativeIntegerSet, singletonSet2): Union should not contain 3")
 
-      val unionSetS1S1 = union(s1,s1)
-      assert(contains(unionSetS1S1, 1), "union(s1,s1): Union contains 1")
+      val unionSetNegativesS1 = union(singletonSet1,negativeIntegerSet)
+      assert(contains(unionSetNegativesS1, 1), "union(singletonSet1,negativeIntegerSet): Union contains 1")
+      assert(contains(unionSetNegativesS1, -11), "union(singletonSet1,negativeIntegerSet): Union contains -11")
 
+      val unionSetNegativesPositives = union(negativeIntegerSet,positiveIntegerSet)
+      assert(contains(unionSetNegativesPositives, -100), "union(negativeIntegerSet,positiveIntegerSet): Union contains -100")
+      assert(contains(unionSetNegativesPositives, 100), "union(negativeIntegerSet,positiveIntegerSet): Union contains 100")
     }
   }
 
   test("intersect contains only elements in both sets")
   {
     new TestSets{
-      val intersectionSetS1S2 = intersect(s1,s2)
-      assert(!contains(intersectionSetS1S2, 1), "intersect(s1,s2): Intersection should not contain 1")
-      assert(!contains(intersectionSetS1S2, 2), "intersect(s1,s2): Intersection should not contain 2")
+      val intersectionSetPositiveS1 = intersect(singletonSet1,positiveIntegerSet)
+      assert(contains(intersectionSetPositiveS1, 1), "intersect(singletonSet1,positiveIntegerSet): Intersection contains 1")
+      assert(!contains(intersectionSetPositiveS1, 2), "intersect(singletonSet1,positiveIntegerSet): Intersection should not contain 2")
 
-      val intersectionSetS1S1 = intersect(s1,s1)
-      assert(contains(intersectionSetS1S1, 1), "intersect(s1,s1): Intersection contains 1")
-      assert(!contains(intersectionSetS1S1, 2), "intersect(s1,s1): Intersection should not contain 2")
+      val intersectionSetNegativeS1 = intersect(singletonSet1,negativeIntegerSet)
+      assert(!contains(intersectionSetNegativeS1, -99), "intersect(singletonSet1,negativeIntegerSet): Intersection should not contain -99")
+      assert(!contains(intersectionSetNegativeS1, 2), "intersect(singletonSet1,negativeIntegerSet): Intersection should not contain 2")
     }
   }
 
@@ -146,13 +154,13 @@ class FunSetSuite extends FunSuite {
   {
     new TestSets
     {
-      val diffSets1s2 = diff(s1, s2)
-      assert(contains(diffSets1s2,1), "diff(s1,s2): diff contains 1 ")
-      assert(!contains(diffSets1s2,2), "diff(s1,s2): diff should not contain 2 ")
+      val diffSetPositiveS1 = diff(singletonSet1, positiveIntegerSet)
+      assert(!contains(diffSetPositiveS1,1), "diff(singletonSet1, positiveIntegerSet): diff contains -1 ")
+      assert(!contains(diffSetPositiveS1,1), "diff(singletonSet1, positiveIntegerSet): diff should not contain 1 ")
 
-      val diffSets3s1 = diff(s3, s1)
-      assert(contains(diffSets3s1, 3), "diff(s3,s1): diff contains 3 ")
-      assert(!contains(diffSets3s1, 1), "diff(s3,s1): diff should not contain 1 ")
+      val diffSetPositiveS2 = diff(positiveIntegerSet, singletonSet2)
+      assert(contains(diffSetPositiveS2, 3), "diff(positiveIntegerSet, singletonSet2): diff contains 1 ")
+      assert(!contains(diffSetPositiveS2, 2), "diff(positiveIntegerSet, singletonSet2): diff should not contain 2 ")
     }
   }
 
@@ -160,13 +168,29 @@ class FunSetSuite extends FunSuite {
   {
     new TestSets
     {
-      val filterSet = filter(s3, s3)
+      val filterSet = filter(singletonSet3, singletonSet3)
       assert(contains(filterSet,3), "filter(s3,s3): filter contains 3")
       assert(!contains(filterSet,2), "filter(s3,s3): filter should not contain 2")
 
-      val filterSetS2 = filter(s2, s3)
-      assert(!contains(filterSetS2,3), "filter(s2,s3): filter should not contain 3")
-      assert(!contains(filterSetS2,2), "filter(s2,s3): filter should not contain 2")
+      val filterSetAllIntegers = filter(negativeIntegerSet,positiveIntegerSet)
+      assert(!contains(filterSetAllIntegers,3), "filter(negativeIntegerSet,positiveIntegerSet): filter should not contain 3")
+      assert(!contains(filterSetAllIntegers,-12), "filter(negativeIntegerSet,positiveIntegerSet): filter should not contain -12")
+    }
+  }
+
+  ignore("for all returns whether all bounded integers within `s` satisfy `p`.")
+  {
+    new TestSets
+    {
+      val forAllSetAllIntegers = forall(negativeIntegerSet,positiveIntegerSet)
+      assert(!forAllSetAllIntegers, "forAll(negativeIntegerSet,positiveIntegerSet): forall returns false for all negative integers satisfying positive integers")
+
+      val forAllSetS3Positives = forall(singletonSet3,positiveIntegerSet)
+      assert(forAllSetS3Positives, "forAll(singletonSet3,positiveIntegerSet): forall returns true for all s3 satisfying positive integers")
+
+      val forAllSetPositivesS3 = forall(positiveIntegerSet,singletonSet3)
+      assert(forAllSetPositivesS3, "forAll(singletonSet3,positiveIntegerSet): forall returns false for all positive integers satisfying s3")
+
     }
   }
 }
