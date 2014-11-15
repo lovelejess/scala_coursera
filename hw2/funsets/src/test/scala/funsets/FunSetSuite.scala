@@ -178,7 +178,7 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  ignore("for all returns whether all bounded integers within `s` satisfy `p`.")
+  test("for all returns whether all bounded integers within `s` satisfy `p`.")
   {
     new TestSets
     {
@@ -189,7 +189,7 @@ class FunSetSuite extends FunSuite {
       assert(forAllSetS3Positives, "forAll(singletonSet3,positiveIntegerSet): forall returns true for all s3 satisfying positive integers")
 
       val forAllSetPositivesS3 = forall(positiveIntegerSet,singletonSet3)
-      assert(forAllSetPositivesS3, "forAll(singletonSet3,positiveIntegerSet): forall returns false for all positive integers satisfying s3")
+      assert(!forAllSetPositivesS3, "forAll(singletonSet3,positiveIntegerSet): forall returns false for all positive integers satisfying s3")
 
     }
   }
