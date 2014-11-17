@@ -82,8 +82,10 @@ class FunSetSuite extends FunSuite {
     val singletonSet1 = singletonSet(1)
     val singletonSet2 = singletonSet(2)
     val singletonSet3 = singletonSet(3)
+    val singletonSet4 = singletonSet(4)
     val negativeIntegerSet = (x:Int) => x < 0
     val positiveIntegerSet = (x:Int) => x > 0
+    val positiveSetXMod2 = (x:Int) => x % 2 > 0
 
   }
 
@@ -193,4 +195,25 @@ class FunSetSuite extends FunSuite {
 
     }
   }
+
+  test("exists returns whether there exists a bounded integer within `s`\n   * that satisfies `p` ")
+  {
+    new TestSets
+    {
+      val existsSetNegativeS1 = exists(negativeIntegerSet, singletonSet1)
+      assert(!existsSetNegativeS1, "exists(negativeIntegerSet, singletonSet1) : exists returns false such that 1 does not exist in all negative integers)")
+
+      val existsSetPositiveS1 = exists(positiveIntegerSet, singletonSet1)
+      assert(existsSetPositiveS1, "exists(positiveIntegerSet, singletonSet1) : exists returns true such that 1 exists in all positive integers)")
+
+      val existsSetPositiveSetXMod2S3 = exists(positiveSetXMod2, singletonSet3)
+      assert(existsSetPositiveSetXMod2S3, "exists(positiveXPlus2Set, singletonSet1) : exists returns true such that 3 exists in all positive integers x mod 2)")
+
+      val existsSetPositiveSetXMod2S4 = exists(positiveSetXMod2, singletonSet4)
+      assert(!existsSetPositiveSetXMod2S4, "exists(positiveXPlus2Set, singletonSet1) : exists returns true such that 4 exists in all positive integers x mod 2)")
+    }
+
+
+  }
+
 }
