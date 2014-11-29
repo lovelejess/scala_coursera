@@ -1,6 +1,7 @@
 package funsets
 
 import org.scalacheck.Prop.True
+import scala.math
 import org.scalatest.FunSuite
 
 import org.junit.runner.RunWith
@@ -86,6 +87,10 @@ class FunSetSuite extends FunSuite {
     val negativeIntegerSet = (x:Int) => x < 0
     val positiveIntegerSet = (x:Int) => x > 0
     val positiveSetXMod2 = (x:Int) => x % 2 > 0
+    val modTwo = (x:Int) => x
+
+    def addTwo(x:Int):Int = x + 2
+
 
   }
 
@@ -196,10 +201,8 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  test("exists returns whether there exists a bounded integer within `s`\n   * that satisfies `p` ")
-  {
-    new TestSets
-    {
+  test("exists returns whether there exists a bounded integer within `s`\n   * that satisfies `p` ") {
+    new TestSets {
       val existsSetNegativeS1 = exists(negativeIntegerSet, singletonSet1)
       assert(!existsSetNegativeS1, "exists(negativeIntegerSet, singletonSet1) : exists returns false such that 1 does not exist in all negative integers)")
 
@@ -212,8 +215,21 @@ class FunSetSuite extends FunSuite {
       val existsSetPositiveSetXMod2S4 = exists(positiveSetXMod2, singletonSet4)
       assert(!existsSetPositiveSetXMod2S4, "exists(positiveXPlus2Set, singletonSet1) : exists returns true such that 4 exists in all positive integers x mod 2)")
     }
-
-
   }
 
-}
+    test("map returns a set transformed by applying `f` to each element of `s`")
+    {
+      new TestSets
+      {
+        val mapAddTwoNegativeSet = map(negativeIntegerSet, addTwo)
+        printSet(negativeIntegerSet)
+        assert(contains(mapAddTwoNegativeSet, -998), "map(negativeIntegerSet, addTwo)" contains -998)
+        assert(!(contains(mapAddTwoNegativeSet, -1000) && contains(mapAddTwoNegativeSet, -999)), "map(negativeIntegerSet, addTwo) does not contain -1000 & -999")
+
+        val mapAddTwoPositiveSet = map(positiveIntegerSet, addTwo)
+        printSet(mapAddTwoPositiveSet)
+        assert(!(contains(mapAddTwoPositiveSet, 1003) && contains(mapAddTwoPositiveSet, 1004)), "map(positiveIntegerSet, addTwo) does not contain --1000")
+
+      }
+    }
+  }
