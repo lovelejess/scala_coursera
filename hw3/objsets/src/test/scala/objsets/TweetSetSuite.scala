@@ -28,31 +28,36 @@ class TweetSetSuite extends FunSuite {
 
   test("filter: on empty set") {
     new TestSets {
-      assert(size(set1.filter(tw => tw.user == "a")) === 0)
+      val filterEmptySet = set1.filter(tw => tw.user == "a")
+      assert(size(filterEmptySet) === 0)
     }
   }
 
   test("filter: a on set5") {
     new TestSets {
-      assert(size(set5.filter(tw => tw.user == "a")) === 1)
+      val filterAOnSetFive = set5.filter(tw => tw.user == "a")
+      assert(size(filterAOnSetFive) === 1)
     }
   }
 
   test("filter: 20 on set5") {
     new TestSets {
-      assert(size(set5.filter(tw => tw.retweets == 20)) === 2)
+      val filter20OnSet5 = set5.filter(tw => tw.retweets == 20)
+      assert(size(filter20OnSet5) === 2)
     }
   }
 
   test("union: set4c and set4d") {
     new TestSets {
-      assert(size(set4c.union(set4d)) === 4)
+      val unionSet4cAndSet4d = set4c.union(set4d)
+      assert(size(unionSet4cAndSet4d) === 4)
     }
   }
 
   test("union: with empty set (1)") {
     new TestSets {
-      assert(size(set5.union(set1)) === 4)
+      val unionWithEmptySet1 = set5.union(set1)
+      assert(size(unionWithEmptySet1) === 4)
     }
   }
 
