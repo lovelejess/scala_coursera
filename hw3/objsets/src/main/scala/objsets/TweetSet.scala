@@ -66,7 +66,7 @@ abstract class TweetSet {
    * Question: Should we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def mostRetweeted: Tweet = ???
+  def mostRetweeted: Tweet
 
   /**
    * Returns a list containing all tweets of this set, sorted by retweet count
@@ -78,7 +78,6 @@ abstract class TweetSet {
    * and be implemented in the subclasses?
    */
   def descendingByRetweet: TweetList = ???
-
 
   /**
    * The following methods are already implemented
@@ -112,7 +111,6 @@ class Empty extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = acc
 
-
   /**
    * The following methods are already implemented
    */
@@ -124,6 +122,8 @@ class Empty extends TweetSet {
   def remove(tweet: Tweet): TweetSet = this
 
   def foreach(f: Tweet => Unit): Unit = ()
+
+  def mostRetweeted: Tweet = throw new java.util.NoSuchElementException
 }
 
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
@@ -158,6 +158,11 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     left.foreach(f)
     right.foreach(f)
   }
+
+  def compareTo(tweet1: Tweet, tweet2: Tweet): Tweet = {
+    if(tweet1.retweets > tweet2.retweets) tweet1 else tweet2
+  }
+  def mostRetweeted: Tweet = compareTo(elem,elem)
 }
 
 trait TweetList {
