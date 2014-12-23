@@ -57,6 +57,7 @@ abstract class TweetSet {
    */
    def union(that: TweetSet): TweetSet = this.filterAcc(tweet => true, that)
 
+  def isEmpty:Boolean
   /**
    * Returns the tweet from this set which has the greatest retweet count.
    *
@@ -77,7 +78,14 @@ abstract class TweetSet {
    * Question: Should we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def descendingByRetweet: TweetList = ???
+  def descendingByRetweet: TweetList =
+    if(isEmpty) Nil
+    else {
+      val maxRetweet = mostRetweeted
+      val tail = remove(maxRetweet)
+      new Cons(maxRetweet, tail.descendingByRetweet)
+    }
+
 
   /**
    * The following methods are already implemented
@@ -123,6 +131,8 @@ class Empty extends TweetSet {
 
   def foreach(f: Tweet => Unit): Unit = ()
 
+  def isEmpty:Boolean = true
+
   def mostRetweeted: Tweet = throw new java.util.NoSuchElementException
 }
 
@@ -159,10 +169,18 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     right.foreach(f)
   }
 
+  def isEmpty:Boolean = false
+
   def compareTo(tweet1: Tweet, tweet2: Tweet): Tweet = {
     if(tweet1.retweets > tweet2.retweets) tweet1 else tweet2
   }
-  def mostRetweeted: Tweet = compareTo(elem,elem)
+
+  def mostRetweeted: Tweet = {
+    if (left.isEmpty && right.isEmpty) elem
+    else if (right.isEmpty) compareTo(left.mostRetweeted,elem)
+    else if (left.isEmpty) compareTo(right.mostRetweeted,elem)
+    else compareTo(left.mostRetweeted, compareTo(left.mostRetweeted, elem))
+  }
 }
 
 trait TweetList {
