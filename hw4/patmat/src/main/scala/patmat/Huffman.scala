@@ -26,12 +26,16 @@ object Huffman {
 
   // Part 1: Basics
 
-  def weight(tree: CodeTree): Int = ??? // tree match ...
+  def weight(tree: CodeTree): Int = tree match {
+    case Leaf(c,w) => w
+    case Fork(left,right,chars,w) => weight(left) + weight(right)
+  }
 
-  def chars(tree: CodeTree): List[Char] = ??? // tree match ...
+  def chars(tree: CodeTree): List[Char] = tree match {
+    //case Fork(left,right, charsList, weight) => charsList
+  }
 
-  def makeCodeTree(left: CodeTree, right: CodeTree) =
-    Fork(left, right, chars(left) ::: chars(right), weight(left) + weight(right))
+  def makeCodeTree(left: CodeTree, right: CodeTree) = ???
 
 
 
