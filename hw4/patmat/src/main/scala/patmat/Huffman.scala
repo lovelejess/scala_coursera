@@ -22,8 +22,6 @@ object Huffman {
   case class Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
   case class Leaf(char: Char, weight: Int) extends CodeTree
 
-
-
   // Part 1: Basics
 
   def weight(tree: CodeTree): Int = tree match {
@@ -32,11 +30,10 @@ object Huffman {
   }
 
   def chars(tree: CodeTree): List[Char] = tree match {
-    //case Fork(left,right, charsList, weight) => charsList
+    case Fork(left,right, charsList, weight) => charsList
   }
 
   def makeCodeTree(left: CodeTree, right: CodeTree) = ???
-
 
 
   // Part 2: Generating Huffman trees
