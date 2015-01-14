@@ -12,7 +12,7 @@ class HuffmanSuite extends FunSuite {
   trait TestTrees {
     val t1 = Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5)
     val t2 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
-    val l1 = List('a','b','a')
+    val l1 = List('a','a','c','d')
   }
 
   test("weight of a t1 tree") {
@@ -39,9 +39,15 @@ class HuffmanSuite extends FunSuite {
     }
   }
 
+  test("findExistingMatch of L1"){
+    new TestTrees{
+      assert(findMatch('a',l1,0) === ('a',2))
+    }
+  }
+
   test("times of List('a','b','a')"){
     new TestTrees{
-      assert(times(l1) === List(('a',1),('b',1),('a',1)))
+      assert(times(l1) === List(('a',2),('c',1), ('d',1)))
     }
   }
   test("string2chars(\"hello, world\")") {

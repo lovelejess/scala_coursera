@@ -73,14 +73,22 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
-  def times(chars: List[Char]): List[(Char, Int)] = chars match {
+  def times(chars: List[Char]): List[(Char,Int)] = chars match {
     case List() => List()
-    case head::tail => countCharsAndList(head, tail)
+    case head::Nil => List((head,1))
+    case head::tail => findMatch(head,tail,0)::times(tail)
   }
 
-  def countCharsAndList(char: Char, restOfList: List[Char]): List[(Char, Int)] = restOfList match {
-    case List() => (char,1)::Nil
-    case head::tail => (char,1)::countCharsAndList(head,tail)
+  def findMatch(head:Char, restOfList: List[Char], count: Int): (Char,Int) = restOfList match {
+    case h::Nil => (head, count)
+    case h::t => {
+                    if (head == h) {
+                      findMatch(head, t, count+1)
+                    }
+                    else {
+                      findMatch(head, t, count)
+                    }
+                  }
   }
 
   /**
