@@ -41,7 +41,7 @@ class HuffmanSuite extends FunSuite {
 
   test("findExistingMatch of L1"){
     new TestTrees{
-      assert(findMatch('c',l1,0) === ('c',1))
+      assert(findMatch('a',l1,0) === ('a',2))
     }
   }
 

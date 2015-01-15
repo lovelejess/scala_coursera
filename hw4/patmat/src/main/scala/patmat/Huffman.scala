@@ -76,7 +76,7 @@ object Huffman {
   def times(chars: List[Char]): List[(Char,Int)] = chars match {
     case List() => List()
     case head::Nil => List((head,1))
-    case head::tail => findMatch(head,tail,1)::times(tail)
+    case head::tail => findMatch(head,tail,1)::times(tail.filterNot(a => a == head))
   }
 
   def findMatch(head:Char, restOfList: List[Char], count: Int): (Char,Int) = restOfList match {
