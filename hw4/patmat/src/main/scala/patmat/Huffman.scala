@@ -103,11 +103,11 @@ object Huffman {
     case (alpha,num)::tail => compareAndInsert((alpha,num),makeOrderedLeafList(tail))
   }
 
-  def compareAndInsert(head:(Char,Int), orderedLeafList: List[Leaf]) : List[Leaf] = orderedLeafList match {
-    case List() => List(new Leaf(head._1, head._2))
-    case orderedListHead::end => {
-                                  if(head._2 <= orderedListHead.weight) (new Leaf(head._1, head._2))::orderedLeafList
-                                  else orderedListHead::compareAndInsert(head,end)
+  def compareAndInsert(headToCompare:(Char,Int), orderedLeafList: List[Leaf]) : List[Leaf] = orderedLeafList match {
+    case List() => List(new Leaf(headToCompare._1, headToCompare._2))
+    case orderedListHead::orderedListTail => {
+                                  if(headToCompare._2 <= orderedListHead.weight) (new Leaf(headToCompare._1, headToCompare._2))::orderedLeafList
+                                  else orderedListHead::compareAndInsert(headToCompare,orderedListTail)
                                 }
 
   }
