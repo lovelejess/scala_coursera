@@ -19,18 +19,21 @@ object Huffman {
    * leaves.
    */
   abstract class CodeTree
+
   case class Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
+
   case class Leaf(char: Char, weight: Int) extends CodeTree
 
   // Part 1: Basics
 
   def weight(tree: CodeTree): Int = tree match {
-    case Leaf(c,w) => w
-    case Fork(left,right,chars,w) => weight(left) + weight(right)
+    case Leaf(c, w) => w
+    case Fork(left, right, chars, w) => weight(left) + weight(right)
   }
 
   def chars(tree: CodeTree): List[Char] = tree match {
-    case Fork(left,right, charsList, weight) => charsList
+    case Leaf(c,w) => List(c)
+    case Fork(left, right, charsList, weight) => charsList
   }
 
   def makeCodeTree(left: CodeTree, right: CodeTree) =
@@ -49,46 +52,46 @@ object Huffman {
    * This function computes for each unique character in the list `chars` the number of
    * times it occurs. For example, the invocation
    *
-   *   times(List('a', 'b', 'a'))
+   * times(List('a', 'b', 'a'))
    *
    * should return the following (the order of the resulting list is not important):
    *
-   *   List(('a', 2), ('b', 1))
+   * List(('a', 2), ('b', 1))
    *
    * The type `List[(Char, Int)]` denotes a list of pairs, where each pair consists of a
    * character and an integer. Pairs can be constructed easily using parentheses:
    *
-   *   val pair: (Char, Int) = ('c', 1)
+   * val pair: (Char, Int) = ('c', 1)
    *
    * In order to access the two elements of a pair, you can use the accessors `_1` and `_2`:
    *
-   *   val theChar = pair._1
-   *   val theInt  = pair._2
+   * val theChar = pair._1
+   * val theInt  = pair._2
    *
    * Another way to deconstruct a pair is using pattern matching:
    *
-   *   pair match {
-   *     case (theChar, theInt) =>
-   *       println("character is: "+ theChar)
-   *       println("integer is  : "+ theInt)
-   *   }
+   * pair match {
+   * case (theChar, theInt) =>
+   * println("character is: "+ theChar)
+   * println("integer is  : "+ theInt)
+   * }
    */
-  def times(chars: List[Char]): List[(Char,Int)] = chars match {
+  def times(chars: List[Char]): List[(Char, Int)] = chars match {
     case List() => List()
-    case head::Nil => List((head,1))
-    case head::tail => findMatch(head,tail,1)::times(tail.filterNot(a => a == head))
+    case head :: Nil => List((head, 1))
+    case head :: tail => findMatch(head, tail, 1) :: times(tail.filterNot(a => a == head))
   }
 
-  def findMatch(head:Char, restOfList: List[Char], count: Int): (Char,Int) = restOfList match {
-    case h::Nil => (head, count)
-    case h::t => {
-                    if (head == h) {
-                      findMatch(head, t, count+1)
-                    }
-                    else {
-                      findMatch(head, t, count)
-                    }
-                  }
+  def findMatch(head: Char, restOfList: List[Char], count: Int): (Char, Int) = restOfList match {
+    case h :: Nil => (head, count)
+    case h :: t => {
+      if (head == h) {
+        findMatch(head, t, count + 1)
+      }
+      else {
+        findMatch(head, t, count)
+      }
+    }
   }
 
   /**
@@ -100,15 +103,15 @@ object Huffman {
    */
   def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = freqs match {
     case List() => List()
-    case (alpha,num)::tail => compareAndInsert((alpha,num),makeOrderedLeafList(tail))
+    case (alpha, num) :: tail => compareAndInsert((alpha, num), makeOrderedLeafList(tail))
   }
 
-  def compareAndInsert(headToCompare:(Char,Int), orderedLeafList: List[Leaf]) : List[Leaf] = orderedLeafList match {
+  def compareAndInsert(headToCompare: (Char, Int), orderedLeafList: List[Leaf]): List[Leaf] = orderedLeafList match {
     case List() => List(new Leaf(headToCompare._1, headToCompare._2))
-    case orderedListHead::orderedListTail => {
-                                  if(headToCompare._2 <= orderedListHead.weight) (new Leaf(headToCompare._1, headToCompare._2))::orderedLeafList
-                                  else orderedListHead::compareAndInsert(headToCompare,orderedListTail)
-                                }
+    case orderedListHead :: orderedListTail => {
+      if (headToCompare._2 <= orderedListHead.weight) (new Leaf(headToCompare._1, headToCompare._2)) :: orderedLeafList
+      else orderedListHead :: compareAndInsert(headToCompare, orderedListTail)
+    }
 
   }
 
@@ -116,6 +119,7 @@ object Huffman {
    * Checks whether the list `trees` contains only one single code tree.
    */
   def singleton(trees: List[CodeTree]): Boolean = trees.size == 1
+
   /**
    * The parameter `trees` of this function is a list of code trees ordered
    * by ascending weights.
@@ -125,11 +129,13 @@ object Huffman {
    * remaining elements of `trees` at a position such that the ordering by weights
    * is preserved.
    *
-   * If `trees` is a list of less than two elements, that list should be returned
+   * If `trees` is a list of less than two elements, that  list should be returned
    * unchanged.
    */
-  def combine(trees: List[CodeTree]): List[CodeTree] = ???
-
+  def combine(trees: List[CodeTree]): List[CodeTree] = trees match {
+    case head::second::tail => makeCodeTree(head,second)::tail. sortWith((element1, element2) => weight(element2) < weight(element2))
+    case _ => trees
+  }
   /**
    * This function will be called in the following way:
    *
