@@ -158,7 +158,6 @@ object Huffman {
            (trees: List[CodeTree]): List[CodeTree] = {
     if(function1(trees)) trees
     else until(function1,function2)(function2(trees))
-
   }
 
   /**
